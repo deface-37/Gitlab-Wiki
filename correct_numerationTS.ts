@@ -25,7 +25,7 @@ const counter = makeCounter(1)
 
 const changedNumbers = new Map()
 
-text = text.replace(regex, (match, p1, num, p3, offset, input) => {
+text = text.replace(regex, (match, p1, num, p3) => {
     const newNum = counter()
     const isChanged = num != newNum
 
@@ -39,7 +39,7 @@ text = text.replace(regex, (match, p1, num, p3, offset, input) => {
 })
 
 const noteRegex =  new RegExp(`(?<=\\*\\*\`Примечание\\..+)\\d+(?=.+\\n\\s*\\n)`, 'g')
-text = text.replace(noteRegex, (match, offset, input)=> {
+text = text.replace(noteRegex, (match)=> {
   return changedNumbers.get(match) || match
 })
 
