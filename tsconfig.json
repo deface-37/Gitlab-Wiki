@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
     "sourceMap": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "outDir": "out",
+    "sourceRoot": "src",
+    "alwaysStrict": true,
+    "removeComments": true
   }
 }
