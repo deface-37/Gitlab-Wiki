@@ -1,15 +1,16 @@
-function makeCounter(initNumber) {
-  return () => initNumber++;
+function showChangedTests(changedTests) {
+  const changedNumbers = Array.from(changedTests).map(value => value[0] + '->' + value[1])
+  console.log(`Измененные тест-кейсы: ${changedNumbers.join(', ')}\nВсего изменено: ${changedNumbers.length}`);
 }
 
 function changeInTests(text) {
   const changedNumbers = new Map()
-  const counter = makeCounter(1)
-  
+  // const counter = makeCounter(1)
+  let newNum = 0;
   const regex = /(\*\*)(\d+)(\. Тест-кейс)/g
 
   text = text.replace(regex, (match, p1, num, p3) => {
-    const newNum = counter()
+    newNum++
     const isChanged = num != newNum
 
     // если нет изменений, то возвращаем как есть
@@ -18,24 +19,36 @@ function changeInTests(text) {
     // если есть, то запоминаем старый и новый номер 
     changedNumbers.set(num, newNum)
     
-    
     // и заменяем номер
     return p1 + newNum + p3
   })
+
+  // выводим в лог номера измененных тест-кейсов
+  showChangedTests(changedNumbers)
 
   return {text, changedNumbers}
 }
 
 function changeInNotes({text, changedNumbers}) {
-  const noteRegex = /(?<=\*\*`Примечание\..+)\d+(?=.+\n\s*\n)/g
+  const noteRegex = /(?<=\*\*`Примечание\..+)\d+(?=.+\r?\n\s*\r?\n)/g
   
   return text.replace(noteRegex, (match) => {
     return changedNumbers.get(match) || match
   })
 }
 
+/**
+ * 
+ * @param {string} text Текст для преобразования
+ * @returns {string} Возвращает текст комплекта текст-кейсов с исправленной нумерацией
+ */
 function numberingCorrection(text) { 
   return changeInNotes(changeInTests(text))
 }
 
 module.exports = numberingCorrection
+
+
+/**
+ * ! Некорректно происходит замена в примечаниях и в логе при повторяющихся номерах тест-кейсов
+ */
