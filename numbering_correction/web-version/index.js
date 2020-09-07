@@ -5,7 +5,6 @@ function showChangedTests(changedTests) {
 
 function changeInTests(text) {
   const changedNumbers = new Map()
-  // const counter = makeCounter(1)
   let newNum = 0;
   const regex = /(\*\*)(\d+)(\. Тест-кейс)/g
 
